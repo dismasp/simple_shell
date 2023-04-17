@@ -1,13 +1,19 @@
 #ifndef SHELL_H
 #define SHELL_H
-#define MAX_COMMAND_LENGTH 1024
-#define MAX_NUM_ARGS 64
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <limits.h>
+
+#define MAX_COMMAND_LENGTH 1024
+#define MAX_NUM_ARGS 64
+
 /*
  * @MAX_COMMAND_LENGHT: Maximum length of a command
  * @MAX_NUMS_ARGS : Maximum number of arguments in a command
@@ -17,7 +23,40 @@
  * @unisted : for poSIX(portable operating system interface)functions
  * @systypes : for data types like pid_t
  * @syswait : for wait() and related functions
+ * @errno :determine the type of error that occurred.
+ * @fontl :defining flags for controlling file I/O operations
+ * @signal :control operations,and manipulating file descriptors, as well
+ *          as defining flags for controlling file I/O operations.
+ *          @limits : maximum length of strings
+ *
  */
+
+
+
+/*
+ * @counter: lines counter
+ *  @input: command line insert by the user
+ *  @args: tokens of the command line
+ *   @status: last status of the shell
+ *   @av: argument vector
+ *   @_environ: environment variable
+ *   @pid: process ID of the shell
+ */
+/*data strut algorithm*/
+typedef struct data
+{
+int counter;
+char *input;
+char **args;
+int status;
+char **av;
+char **_environ;
+char *pid;
+} data_shell;
+
+
+
+
 
 
 /**
@@ -42,6 +81,13 @@ typedef struct builtin_s
 char *name;
 int (*f)(char **argv, char **front);
 } bultin_s;
+
+/* Display Prompt*/
+void print_prompt(void);
+
+/* Read user input*/
+void read_command(char *command);
+
 
 
 /* Builtins */
