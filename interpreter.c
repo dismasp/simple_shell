@@ -1,6 +1,10 @@
 #include "shell.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define MAX_COMMAND_LEN 256
 #define MAX_ARGS 16
@@ -8,8 +12,8 @@
 /*
  * @file interprete.c
  * @print_prompt displays prompt message $
- * @excute command excutes user command
- * @strspn remove trailling newline character
+ * @execute_command executes user command
+ * @remove_newline removes trailing newline character
  */
 
 /* Displays user prompt */
@@ -21,8 +25,18 @@ printf("$ ");
 /* Read user input */
 void read_command(char *command)
 {
-fgets(command, MAX_COMMAND_LEN, stdin);
+gets(command, MAX_COMMAND_LEN, stdin);
 command[strcspn(command, "\n")] = '\0';
+}
+
+/* Remove trailing newline character */
+void remove_newline(char *str)
+{
+int len = strlen(str);
+if (len > 0 && str[len - 1] == '\n')
+{
+str[len - 1] = '\0';
+}
 }
 
 /* Execute user command */
@@ -45,20 +59,21 @@ args[i] = NULL;
 pid = fork();
 if (pid == 0)
 {
- /*@execvp Child process*/
-execvp(args[0], args);
+ /* Child process */
+xecvp(args[0], args);
 printf("Command not found: %s\n", args[0]);
 exit(1);
 }
 else if (pid < 0)
 {
+/* Fork failed */
+printf("Failed to fork process\n");
+exit(1);
 
-/* Error fork */
-perror("fork");
 }
 else
 {
- /*Parent process*/
+/* Parent process */
 waitpid(pid, &status, 0);
 }
 }
