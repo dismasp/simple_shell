@@ -1,5 +1,16 @@
 #include "shell.h"
 
+/**
+ * main - Entry point for the shell program
+ *
+ * This function starts the shell and enters a loop to read input from the
+ * user, parse the input into command and argument tokens, and execute the
+ * commands. It also frees allocated memory and environment variables when
+ * the user exits the shell.
+ *
+ * Return: The exit status of the last executed command.
+ */
+
 int main(void)
 {
 char *line = NULL;  /* Pointer to hold input line */
