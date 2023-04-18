@@ -11,8 +11,6 @@
 #include <signal.h>
 #include <limits.h>
 
-#define MAX_COMMAND_LENGTH 1024
-#define MAX_NUM_ARGS 64
 
 /*
  * @MAX_COMMAND_LENGHT: Maximum length of a command
@@ -52,7 +50,7 @@ int status;
 char **av;
 char **_environ;
 char *pid;
-} data_shell;
+} data_t;
 
 
 
