@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_NUM_ARGS 64
@@ -17,15 +20,14 @@
 int main(int argc, char **argv)
 {
 
-/*declare void variables*/
-(void)argc;
-(void)argv;
-
 char *prompt = "(shell)$";
 char *lineptr = NULL;
 size_t n = 0;
 ssize_t nchar_read;
 
+/*declare void variables*/
+(void)argc;
+(void)argv;
 
 /*create infite loop to show prompt after exec */
 while (1)

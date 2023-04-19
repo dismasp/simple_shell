@@ -11,6 +11,10 @@
 #include <signal.h>
 #include <limits.h>
 
+#define INVALID_COMMAND -1
+#define INTERNAL_COMMAND 2
+#define EXTERNAL_COMMAND 1
+#define PATH_COMMAND 3
 
 /*
  * @MAX_COMMAND_LENGHT: Maximum length of a command
@@ -26,21 +30,9 @@
  * @signal :control operations,and manipulating file descriptors, as well
  *          as defining flags for controlling file I/O operations.
  *          @limits : maximum length of strings
- *
  */
 
 
-
-/*
- * @counter: lines counter
- *  @input: command line insert by the user
- *  @args: tokens of the command line
- *   @status: last status of the shell
- *   @av: argument vector
- *   @_environ: environment variable
- *   @pid: process ID of the shell
- */
-/*data strut algorithm*/
 typedef struct data
 {
 int counter;
@@ -51,8 +43,16 @@ char **av;
 char **_environ;
 char *pid;
 } data_t;
-
-
+/*
+ *@typedef data struct- defines a data structure called data_t
+ *@counter: lines counter
+ *@input: command line insert by the user
+ *@args: tokens of the command line
+ *@status: last status of the shell
+ *@av: argument vector
+ *@_environ: environment variable
+ *@pid: process ID of the shell
+ */
 
 
 
@@ -79,12 +79,6 @@ typedef struct builtin_s
 char *name;
 int (*f)(char **argv, char **front);
 } bultin_s;
-
-/* Display Prompt*/
-void print_prompt(void);
-
-/* Read user input*/
-void read_command(char *command);
 
 
 
