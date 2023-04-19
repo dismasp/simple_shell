@@ -10,8 +10,6 @@ list_t *dirs, *head;
 struct stat st;
 
 
-
-
 /**
  * get_location - Locates a command in the PATH.
  * @command: The command to locate.
