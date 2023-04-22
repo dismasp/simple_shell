@@ -4,6 +4,7 @@
  * shell_getline - read input from user
  * Return: input string from user
  */
+
 char *shell_getline(void)
 {
 char *line = NULL;

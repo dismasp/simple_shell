@@ -81,7 +81,6 @@ int (*f)(char **argv, char **front);
 } bultin_s;
 
 
-
 /* putchar functions*/
 
 int fputc(int c, FILE *stream);
@@ -89,8 +88,6 @@ int fputs(const char *s, FILE *stream);
 int putc(int c, FILE *stream);
 int putchar(int c);
 int puts(const char *s);
-
-
 
 
 /* Builtins */
@@ -129,6 +126,8 @@ int handle_args(int *exe_ret);
 int check_args(char **args);
 void free_args(char **args, char **front);
 char **replace_aliases(char **args);
+void handle_commands(char *input);
+void handle_commands_separator(char *line);
 
 /* Error Handling */
 int create_error(char **args, int err);
