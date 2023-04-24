@@ -1,170 +1,144 @@
 #include "shell.h"
-#include <sys/stat.h>
-#include <string.h>
 
-char *fill_path_dir(char *path);
-list_t *get_path_dir(char *path);
-
-char **path, *temp;
-list_t *dirs, *head;
-struct stat st;
-
-
-
+int shellby_env(char **args, char __attribute__((__unused__)) **front);
+int shellby_setenv(char **args, char __attribute__((__unused__)) **front);
+int shellby_unsetenv(char **args, char __attribute__((__unused__)) **front);
 
 /**
- * get_location - Locates a command in the PATH.
- * @command: The command to locate.
- * Return: If an error occurs or the command cannot be located - NULL.
- *         Otherwise - the full pathname of the command.
- */
-
-char *get_location(char *command)
-{
-path = _getenv("PATH");
-if (!path || !(*path))
-return (NULL);
-
-dirs = get_path_dir(*path + 5);
-head = dirs;
-
-while (dirs)
-{
-
-temp = malloc(_strlen(dirs->dir) + _strlen(command) + 2);
-if (!temp)
-return (NULL);
-
-/*
- *@_strcpy:strcpy function copies the characters from the source string.
- *@_strcat:concatenate (append) two null-terminated strings.
- */
-
-_strcpy(temp, dirs->dir);
-_strcat(temp, "/");
-_strcat(temp, command);
-
-if (stat(temp, &st) == 0)
-{
-free_list(head);
-return (temp);
-}
-
-else
-{
-free(temp);
-}
-
-dirs = dirs->next;
-free(temp);
-}
-
-free_list(head);
-return (NULL);
-}
-
-
-/**
- * fill_path_dir - Copies path but also replaces leading/sandwiched/trailing
- *		   colons (:) with current working directory.
- * @path: The colon-separated list of directories.
- * Return: A copy of path with any leading/sandwiched/trailing colons replaced
- *	   with the current working directory.
- */
-
-
-char *fill_path_dir(char *path)
-{
-
-int i, length = 0;
-char *path_copy, *pwd;
-
-pwd = *(_getenv("PWD")) + 4;
-for (i = 0; path[i]; i++)
-{
-if (path[i] == ':')
-{
-if (path[i + 1] == ':' || i == 0 || path[i + 1] == '\0')
-length += _strlen(pwd) + 1;
-else
-length++;
-}
-
-else
-length++;
-}
-
-path_copy = malloc(sizeof(char) * (length + 1));
-if (!path_copy)
-return (NULL);
-path_copy[0] = '\0';
-for (i = 0; path[i]; i++)
-{
-
-if (path[i] == ':')
-{
-if (i == 0)
-{
-
-_strcat(path_copy, pwd);
-_strcat(path_copy, ":");
-}
-else if (path[i + 1] == ':' || path[i + 1] == '\0')
-{
-_strcat(path_copy, ":");
-_strcat(path_copy, pwd);
-
-}
-else
-_strcat(path_copy, ":");
-}
-else
-{
-
-_strncat(path_copy, &path[i], 1);
-}
-}
-
-return (path_copy);
-}
-
-
-/**
- * get_path_dir - Tokenizes a colon-separated list of
- *                directories into a list_s linked list.
- * @path: The colon-separated list of directories.
+ * shellby_env - Prints the current environment.
+ * @args: An array of arguments passed to the shell.
+ * @front: A double pointer to the beginning of args.
  *
- * Return: A pointer to the initialized linked list.
+ * Return: If an error occurs - -1.
+ *	   Otherwise - 0.
+ *
+ * Description: Prints one variable per line in the
+ *              format 'variable'='value'.
  */
 
+char **environ;
 
-list_t *get_path_dir(char *path)
+int shellby_env(char **args, char __attribute__((__unused__)) **front)
 {
-
 int index;
-char **dirs, *path_copy;
-list_t *head = NULL;
+char nc = '\n';
 
-path_copy = fill_path_dir(path);
-if (!path_copy)
-return (NULL);
-dirs = _strtok(path_copy, ":");
-free(path_copy);
-if (!dirs)
-return (NULL);
+if (!environ)
+return (-1);
 
-for (index = 0; dirs[index]; index++)
+for (index = 0; environ[index]; index++)
 {
-
-if (add_node_end(&head, dirs[index]) == NULL)
-{
-free_list(head);
-free(dirs);
-return (NULL);
-}
+write(STDOUT_FILENO, environ[index], _strlen(environ[index]));
+write(STDOUT_FILENO, &nc, 1);
 }
 
-free(dirs);
+(void)args;
+return (0);
+}
 
-return (head);
+/**
+ * shellby_setenv - Changes or adds an environmental variable to the PATH.
+ * @args: An array of arguments passed to the shell.
+ * @front: A double pointer to the beginning of args.
+ * Description: args[1] is the name of the new or existing PATH variable.
+ *              args[2] is the value to set the new or changed variable to.
+ *
+ * Return: If an error occurs - -1.
+ *         Otherwise - 0.
+ */
+
+int shellby_setenv(char **args, char __attribute__((__unused__)) **front)
+{
+char **env_var = NULL, **new_environ, *new_value;
+size_t size;
+int index;
+
+if (!args[0] || !args[1])
+return (create_error(args, -1));
+
+new_value = malloc(_strlen(args[0]) + 1 + _strlen(args[1]) + 1);
+if (!new_value)
+return (create_error(args, -1));
+_strcpy(new_value, args[0]);
+_strcat(new_value, "=");
+_strcat(new_value, args[1]);
+
+env_var = _getenv(args[0]);
+if (env_var)
+{
+free(*env_var);
+*env_var = new_value;
+return (0);
+
+}
+
+for (size = 0; environ[size]; size++)
+;
+
+new_environ = malloc(sizeof(char *) * (size + 2));
+
+if (!new_environ)
+{
+
+free(new_value);
+return (create_error(args, -1));
+}
+
+for (index = 0; environ[index]; index++)
+new_environ[index] = environ[index];
+
+free(environ);
+environ = new_environ;
+environ[index] = new_value;
+environ[index + 1] = NULL;
+return (0);
+}
+
+/**
+ * shellby_unsetenv - Deletes an environmental variable from the PATH.
+ * @args: An array of arguments passed to the shell.
+ * @front: A double pointer to the beginning of args.
+ * Description: args[1] is the PATH variable to remove.
+ *
+ * Return: If an error occurs - -1.
+ *         Otherwise - 0.
+ */
+
+int shellby_unsetenv(char **args, char __attribute__((__unused__)) **front)
+{
+char **env_var, **new_environ;
+size_t size;
+int index, index2;
+
+if (!args[0])
+
+return (create_error(args, -1));
+env_var = _getenv(args[0]);
+if (!env_var)
+
+return (0);
+
+for (size = 0; environ[size]; size++)
+;
+new_environ = malloc(sizeof(char *) * size);
+
+if (!new_environ)
+return (create_error(args, -1));
+
+for (index = 0, index2 = 0; environ[index]; index++)
+{
+if (*env_var == environ[index])
+{
+free(*env_var);
+continue;
+}
+
+new_environ[index2] = environ[index];
+index2++;
+}
+free(environ);
+environ = new_environ;
+environ[size - 1] = NULL;
+
+return (0);
 }

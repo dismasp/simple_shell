@@ -17,6 +17,8 @@
  * @lineptr to store the address of the buffer holding whatever was typed.
  * @*delim represents characters separating the string
  */
+int fputs(const char *s, FILE *stream);
+
 int main(int argc, char **argv)
 {
 
@@ -24,7 +26,7 @@ char *prompt = "(shell)$";
 char *lineptr = NULL;
 size_t n = 0;
 ssize_t nchar_read;
-
+ssize_t i;
 /*declare void variables*/
 (void)argc;
 (void)argv;
@@ -32,21 +34,41 @@ ssize_t nchar_read;
 /*create infite loop to show prompt after exec */
 while (1)
 {
-printf("%s ", prompt);
+fputs(prompt, stdout);
 nchar_read = getline(&lineptr, &n, stdin);
 
 /*if getline functions fail or user enters condition (Ctrl+D)*/
 if (nchar_read == -1)
 {
-printf("Exiting shell...\n ");
+putchar('E');
+putchar('x');
+putchar('i');
+putchar('t');
+putchar('i');
+putchar('n');
+putchar('g');
+putchar(' ');
+putchar('s');
+putchar('h');
+putchar('e');
+putchar('l');
+putchar('l');
+putchar('.');
+putchar('.');
+putchar('.');
+putchar(' ');
+putchar('\n');
 return (-1);
 }
+ /* Use putchar to print characters in lineptr */
+for (i = 0; i < nchar_read; i++)
+{
+putchar(lineptr[i]);
+}
 
-printf("%s\n", lineptr);
 free(lineptr);
 lineptr = NULL;
 }
 return (0);
 
 }
-
