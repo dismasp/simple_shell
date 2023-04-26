@@ -17,21 +17,37 @@
 #define PATH_COMMAND 3
 
 /*
- * @MAX_COMMAND_LENGHT: Maximum length of a command
- * @MAX_NUMS_ARGS : Maximum number of arguments in a command
- * @stdio : for starndard input/output functions
- * @stdlib : for general purpose functions like memory allocation
- * @string : for string handling functions
- * @unisted : for poSIX(portable operating system interface)functions
- * @systypes : for data types like pid_t
- * @syswait : for wait() and related functions
- * @errno :determine the type of error that occurred.
- * @fontl :defining flags for controlling file I/O operations
- * @signal :control operations,and manipulating file descriptors, as well
+ * MAX_COMMAND_LENGHT: Maximum length of a command
+ * MAX_NUMS_ARGS : Maximum number of arguments in a command
+ * stdio : for starndard input/output functions
+ * stdlib : for general purpose functions like memory allocation
+ * string : for string handling functions
+ * unisted : for poSIX(portable operating system interface)functions
+ * systypes : for data types like pid_t
+ * syswait : for wait() and related functions
+ * errno :determine the type of error that occurred.
+ * 
+ * fontl :defining flags for controlling file I/O operations
+ * signal :control operations,and manipulating file descriptors, as well
  *          as defining flags for controlling file I/O operations.
  *          @limits : maximum length of strings
  */
 
+
+
+
+
+
+/*
+ *_struct data: defines a data structure called data_t
+ *counter: lines counter
+ *input: command line insert by the user
+ *args: tokens of the command line
+ *status: last status of the shell
+ *av: argument vector
+ *_environ: environment variable
+ *pid: process ID of the shell
+ */
 
 typedef struct data
 {
@@ -42,37 +58,29 @@ int status;
 char **av;
 char **_environ;
 char *pid;
+char *value;
 } data_t;
-/*
- *@typedef data struct- defines a data structure called data_t
- *@counter: lines counter
- *@input: command line insert by the user
- *@args: tokens of the command line
- *@status: last status of the shell
- *@av: argument vector
- *@_environ: environment variable
- *@pid: process ID of the shell
- */
-
 
 
 
 /**
- * struct list_s - A new struct type defining a linked list
- * @dir: A directory path.
- * @next: A pointer to another struct list_s.
+ * _struct list_s - A new struct type defining a linked list
+ * _dir: A directory path.
+ * _next: A pointer to another struct list_s.
  */
 typedef struct list_s
 {
 char *dir;
 struct list_s *next;
+struct alias_t *alias;
+struct alias_t *temp;
 } list_t;
 
 
 /**
- * struct builtin_s - A new struct type defining builtin commands.
- * @name: The name of the builtin command.
- * @f: A function pointer to the builtin command's function.
+ *_ struct builtin_s - A new struct type defining builtin commands.
+ * _name: The name of the builtin command.
+ * _*f: A function pointer to the builtin command's function.
  */
 typedef struct builtin_s
 {
@@ -82,7 +90,6 @@ int (*f)(char **argv, char **front);
 
 
 /* putchar functions*/
-
 int fputc(int c, FILE *stream);
 int fputs(const char *s, FILE *stream);
 int putc(int c, FILE *stream);
@@ -99,6 +106,8 @@ int shellby_unsetenv(char **args, char __attribute__((__unused__)) **front);
 int shellby_cd(char **args, char __attribute__((__unused__)) **front);
 int shellby_alias(char **args, char __attribute__((__unused__)) **front);
 int shellby_help(char **args, char __attribute__((__unused__)) **front);
+void set_alias(char *var_name, char *value);
+void print_alias(list_t*alias);
 
 /* Builtin Helpers */
 char **_copyenv(void);
@@ -128,6 +137,8 @@ void free_args(char **args, char **front);
 char **replace_aliases(char **args);
 void handle_commands(char *input);
 void handle_commands_separator(char *line);
+
+
 
 /* Error Handling */
 int create_error(char **args, int err);

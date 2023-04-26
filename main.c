@@ -8,8 +8,10 @@
 
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_NUM_ARGS 64
+int fputs(const char *s, FILE *stream);
+
 /*
- * @main:entry point
+ * @main The entry pointfor the program.
  * @prompt display shell
  * @getline gets user input
  * @size_t allocates memory
@@ -17,7 +19,6 @@
  * @lineptr to store the address of the buffer holding whatever was typed.
  * @*delim represents characters separating the string
  */
-int fputs(const char *s, FILE *stream);
 
 int main(int argc, char **argv)
 {
