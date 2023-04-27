@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "shell.h"
 
 /**
@@ -75,3 +76,5 @@ final_output = num_result;
 
 return (final_output);
 }
+=======
+>>>>>>> 6c626c65ac3bc153361f8263251830c1a10a152e
