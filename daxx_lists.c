@@ -17,11 +17,11 @@ return (NULL);
 new_head_node = malloc(sizeof(list_t));
 if (!new_head_node)
 return (NULL);
-_memset((void *)new_head_node, 0, sizeof(list_t));
+memset((void *)new_head_node, 0, sizeof(list_t));
 new_head_node->num = index;
 if (input_str)
 {
-new_head_node->str = _strdup(input_str);
+new_head_node->str = strdup(input_str);
 if (!new_head_node->str)
 {
 free(new_head_node);
@@ -52,11 +52,11 @@ current_node = *head_ref;
 new_node = malloc(sizeof(list_t));
 if (!new_node)
 return (NULL);
-_memset((void *)new_node, 0, sizeof(list_t));
+memset((void *)new_node, 0, sizeof(list_t));
 new_node->num = index;
 if (input_str)
 {
-new_node->str = _strdup(input_str);
+new_node->str = strdup(input_str);
 if (!new_node->str)
 {
 free(new_node);
@@ -86,8 +86,8 @@ size_t counter = 0;
 
 while (head)
 {
-_puts(head->str ? head->str : "(nil)");
-_puts("\n");
+puts(head->str ? head->str : "(nil)");
+puts("\n");
 head = head->next;
 counter++;
 }

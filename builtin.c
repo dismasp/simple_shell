@@ -13,16 +13,16 @@ int exit_status;
 
 if (info->argv[1]) /* If there is an exit argument */
 {
-exit_status = error_str_to_int(info->argv[1]);
+exit_status = error_string_to_int(info->argv[1]);
 if (exit_status == -1)
 {
 info->status = 2;
-display_error(info, "Illegal number: ");
+display_error(info, "llegal number: ");
 write_err(info->argv[1]);
 write_char('\n');
 return (1);
 }
-info->err_num = error_str_to_int(info->argv[1]);
+info->err_num = error_string_to_int(info->argv[1]);
 return (-2);
 }
 info->err_num = -1;
@@ -42,7 +42,7 @@ int chdir_result;
 
 curr_path = getcwd(buffer, 1024);
 if (!curr_path)
-_puts("TODO: >>getcwd failure emsg here<<\n");
+puts("TODO: >>getcwd failure emsg here<<\n");
 if (!info->argv[1])
 {
 dir = get_env_value(info, "HOME=");
@@ -52,16 +52,18 @@ chdir((dir = get_env_value(info, "PWD=")) ? dir : "/");
 else
 chdir_result = chdir(dir);
 }
-else if (_strcmp(info->argv[1], "-") == 0)
+else if (strcmp(info->argv[1], "-") == 0)
 {
 if (!get_env_value(info, "OLDPWD="))
 {
-_puts(curr_path);
-_putchar('\n');
+puts(curr_path);
+putchar('\n');
 return (1);
 }
-_puts(get_env_value(info, "OLDPWD=")), _putchar('\n');
-chdir_result = /* TODO: what should this be? */
+
+puts(get_env_value(info, "OLDPWD=");
+putchar('\n');
+ chdir_result = /* TODO: what should this be? */
 chdir((dir = get_env_value(info, "OLDPWD=")) ? dir : "/");
 }
 else
@@ -90,8 +92,8 @@ int display_help(info_t *info)
 char **arg_list;
 
 arg_list = info->argv;
-_puts("help call works. Function not yet implemented \n");
+puts("help call works. Function not yet implemented \n");
 if (0)
-_puts(*arg_list); /* temp att_unused workaround */
+puts(*arg_list); /* temp att_unused workaround */
 return (0);
 }

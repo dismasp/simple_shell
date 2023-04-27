@@ -26,19 +26,19 @@ if (errno == EACCES)
 exit(126);
 if (errno == ENOENT)
 {
-_eputs(argv[0]);
-_eputs(": 0: Can't open ");
-_eputs(argv[1]);
-_eputchar('\n');
-_eputchar(BUF_FLUSH);
+puts(argv[0]);
+puts(": 0: Can't open ");
+puts(argv[1]);
+putchar('\n');
+putchar(BUF_FLUSH);
 exit(127);
 }
 return (EXIT_FAILURE);
 }
 shell_info->readfd = file_descriptor;
 }
-populate_env_list(shell_info);
-read_history(shell_info);
+populate_enviroment_list(shell_info);
+shell_history(shell_info);
 hsh(shell_info, argv);
 return (EXIT_SUCCESS);
 }
