@@ -33,13 +33,13 @@ return (-2);
  * change_dir - changes the current directory of the process
  * @info: Structure containing potential arguments. Used to maintain
  * constant function prototype.
- * Return: Always 0
+ * Return: Always`:wq
+ * 0
  */
 int change_dir(info_t *info)
 {
 char *curr_path, *dir, buffer[1024];
 int chdir_result;
-
 curr_path = getcwd(buffer, 1024);
 if (!curr_path)
 puts("TODO: >>getcwd failure emsg here<<\n");
@@ -60,10 +60,9 @@ puts(curr_path);
 putchar('\n');
 return (1);
 }
-
 puts(get_env_value(info, "OLDPWD=");
 putchar('\n');
- chdir_result = /* TODO: what should this be? */
+chdir_result = /* TODO: what should this be? */
 chdir((dir = get_env_value(info, "OLDPWD=")) ? dir : "/");
 }
 else
