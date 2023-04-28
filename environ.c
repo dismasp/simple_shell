@@ -7,7 +7,7 @@
  * Return: Always 0
  */
 
-display_list_str(info->env);
+/*display_list_str(info->env)*/
 
 int show_env(info_t *info)
 {
