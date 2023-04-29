@@ -37,8 +37,8 @@ return (result_num);
  */
 void display_error(info_t *info, char *error_str)
 {
-print_error_str(info->fname);
-print_error_str(": ");
+print_error_message(info->fname);
+print_error_message(": ");
 print_decimal(info->line_count, STDERR_FILENO);
 print_error_str(": ");
 print_error_str(info->argv[0]);

@@ -1,11 +1,14 @@
 #include "shell.h"
-
 /**
- * **split_string - divides a string into words. Repeat delimiters are ignored
- * @input: the input string
- * @delim: the delimiter string
- * Return: a pointer to an array of strings, or NULL on failure
+ **split_string - divides a string into words. Repeat delimiters are ignored
+ *@input: the input string
+ *@delim: the delimiter string
+ *@c : char argument
+ *Return: a pointer to an array of strings, or NULL on failure
  */
+
+int is_delim(char c, char *delim);
+
 char **split_string(char *input, char *delim)
 {
 int a, b, c, d, word_count = 0;
@@ -16,8 +19,9 @@ return (NULL);
 if (!delim)
 delim = " ";
 for (a = 0; input[a] != '\0'; a++)
-if (!is_delim(input[a], delim) && (is_delim(input[a + 1],
-				delim) || !input[a + 1]))
+if (!is_delim(input[a], delim)
+&& (is_delim(input[a + 1],
+delim) || !input[a + 1]))
 word_count++;
 
 if (word_count == 0)

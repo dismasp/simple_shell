@@ -8,8 +8,9 @@
  *
  * Return: bytes read
  */
-ssize_t buffered_input(info_t *info, char **buf_ptr, size_t *buf_len)
-{
+signal(SIGINT, ctrl_c_handler);
+| inspect_chain(info, chain_buf, &j, i, buf_length);
+ssize_t buffered_input(info_t *info, char **buf_ptr, size_t *buf_len) {
 ssize_t read_bytes = 0;
 size_t len_p = 0;
 
@@ -32,7 +33,7 @@ read_bytes--;
 }
 info->linecount_flag = 1;
 strip_comments(*buf_ptr);
-build_history_list(info, *buf_ptr, info->histcount++);
+build_history_list_data(info, *buf_ptr, info->histcount++);
 {
 *buf_len = read_bytes;
 info->cmd_buf = buf_ptr;
@@ -55,7 +56,7 @@ static size_t i, j, buf_length;
 ssize_t read_bytes = 0;
 char **buf_ptr_p = &(info->arg), *p;
 
-_putchar(BUF_FLUSH);
+putchar(BUF_FLUSH);
 read_bytes = buffered_input(info, &chain_buf, &buf_length);
 if (read_bytes == -1) /* EOF */
 return (-1);
@@ -76,11 +77,11 @@ i = j + 1; /* increment past nulled ';'' */
 if (i >= buf_length) /* reached end of buffer? */
 {
 i = buf_length = 0; /* reset position and length */
-info->cmd_buf_type = CMD_NORM;
+info->cmd_buf_type = CMD_NORM0;
 }
 
 *buf_ptr_p = p; /* pass back pointer to current command position */
-return (_strlen(p)); /* return length of current command */
+return (strlen(p)); /* return length of current command */
 }
  /* else not a chain, pass back buffer from custom_getline() */
 *buf_ptr_p = chain_buf;
@@ -133,16 +134,16 @@ r = read_buffer(info, buf, &len);
 if (r == -1 || (r == 0 && len == 0))
 return (-1);
 
-c = _strchr(buf + i, '\n');
+c = strchr(buf + i, '\n');
 k = c ? 1 + (unsigned int)(c - buf) : len;
-new_p = _realloc(p, s, s ? s + k : k + 1);
+new_p = realloc(p, s, s ? s + k : k + 1);
 if (!new_p) /* MALLOC FAILURE! */
 return (p ? free(p), -1 : -1);
 
 if (s)
-_strncat(new_p, buf + i, k - i);
+strncat(new_p, buf + i, k - i);
 else
-_strncpy(new_p, buf + i, k - i + 1);
+strncpy(new_p, buf + i, k - i + 1);
 
 s += k - i;
 i = k;
@@ -162,8 +163,8 @@ return (s);
  */
 void ctrl_c_handler(__attribute__((unused))int sig_num)
 {
-_puts("\n");
-_puts("$ ");
-_putchar(BUF_FLUSH);
+puts("\n");
+puts("$ ");
+putchar(BUF_FLUSH);
 }
 

@@ -10,7 +10,7 @@ char **get_environment(info_t *info)
 {
 if (!info->environ || info->env_changed)
 {
-info->environ = list_to_strings(info->env);
+info->environ = list_to_string_array(info->env);
 info->env_changed = 0;
 }
 
@@ -38,7 +38,7 @@ while (node)
 substring = starts_with(node->str, var);
 if (substring && *substring == '=')
 {
-info->env_changed = delete_node_at_index(&(info->env), idx);
+info->env_changed = delete_node_at(&(info->env), idx);
 idx = 0;
 node = info->env;
 continue;
@@ -67,12 +67,12 @@ char *substring;
 if (!var || !value)
 return (0);
 
-temp_buf = malloc(_strlen(var) + _strlen(value) + 2);
+temp_buf = malloc(strlen(var) + strlen(value) + 2);
 if (!temp_buf)
 return (1);
-_strcpy(temp_buf, var);
-_strcat(temp_buf, "=");
-_strcat(temp_buf, value);
+strcpy(temp_buf, var);
+strcat(temp_buf, "=");
+strcat(temp_buf, value);
 node = info->env;
 while (node)
 {
@@ -86,7 +86,7 @@ return (0);
 }
 node = node->next;
 }
-add_node_end(&(info->env), temp_buf, 0);
+add_list_node_end(&(info->env), temp_buf, 0);
 free(temp_buf);
 info->env_changed = 1;
 return (0);

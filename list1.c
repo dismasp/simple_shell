@@ -1,11 +1,13 @@
 #include "shell.h"
-
+#include <stdlib.h>
+#include <stdio.h>
 /**
  * find_list_length - determines length of linked list
  * @head: pointer to first node
  *
  * Return: size of list
  */
+
 size_t find_list_length(const list_t *head)
 {
 size_t count = 0;
@@ -38,16 +40,16 @@ if (!str_array)
 return (NULL);
 for (idx = 0; current_node; current_node = current_node->next, idx++)
 {
-tmp_str = malloc(_strlen(current_node->str) + 1);
+tmp_str = malloc(strlen(current_node->str) + 1);
 if (!tmp_str)
 {
-for (size_t j = 0; j < idx; j++)
+for (size_t j = 0; j < idx; j++);
 free(str_array[j]);
 free(str_array);
 return (NULL);
 }
 
-tmp_str = _strcpy(tmp_str, current_node->str);
+tmp_str = strcpy(tmp_str, current_node->str);
 str_array[idx] = tmp_str;
 }
 str_array[idx] = NULL;
@@ -66,11 +68,13 @@ size_t count = 0;
 
 while (head)
 {
-_puts(convert_number(head->num, 10, 0));
-_putchar(':');
-_putchar(' ');
-_puts(head->str ? head->str : "(nil)");
-_puts("\n");
+
+char* num_str = convert_number(head->num, 10, 0);
+puts(num_str);
+putchar(':');
+putchar(' ');
+puts(head->str ? head->str : "(nil)");
+puts("\n");
 head = head->next;
 count++;
 }
@@ -118,4 +122,4 @@ head = head->next;
 position++;
 }
 return (-1);
-} *
+}

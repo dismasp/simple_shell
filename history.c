@@ -10,16 +10,16 @@ char *obtain_history_file(info_t *info)
 {
 char *buffer, *directory;
 
-directory = _getenv(info, "HOME=");
+directory = getenv(info_t * "HOME=");
 if (!directory)
 return (NULL);
-buffer = malloc(sizeof(char) * (_strlen(directory) + _strlen(HIST_FILE) + 2));
+buffer = malloc(sizeof(char) * (strlen(directory) + strlen(HIST_FILE) + 2));
 if (!buffer)
 return (NULL);
 buffer[0] = 0;
-_strcpy(buffer, directory);
-_strcat(buffer, "/");
-_strcat(buffer, HIST_FILE);
+strcpy(buffer, directory);
+strcat(buffer, "/");
+strcat(buffer, HIST_FILE);
 return (buffer);
 }
 
@@ -45,10 +45,10 @@ return (-1);
 for (current_node = info->history; current_node;
 current_node = current_node->next)
 {
-_putsfd(current_node->str, file_descriptor);
-_putfd('\n', file_descriptor);
+puts(current_node->str, file_descriptor);
+puts('\n', file_descriptor);
 }
-_putfd(BUF_FLUSH, file_descriptor);
+puts(BUF_FLUSH, file_descriptor);
 close(file_descriptor);
 return (1);
 }
@@ -96,9 +96,9 @@ if (prev != index)
 add_to_history_list(info, buffer + prev, line_count++);
 free(buffer);
 info->histcount = line_count;
-while (info->histcount-- >= HIST_MAX)
-delete_node_at_index(&(info->history), 0);
-update_history(info);
+while (info->histcount-- >= INT_MAX)
+delete_node_at(&(info->history), 0);
+save_history(info);
 return (info->histcount);
 }
 
@@ -116,7 +116,7 @@ list_t *node_ptr = NULL;
 
 if (info->history)
 node_ptr = info->history;
-add_node_end(&node_ptr, buffer, line_count);
+add_list_node_end(&node_ptr, buffer, line_count);
 
 if (!info->history)
 info->history = node_ptr;

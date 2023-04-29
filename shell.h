@@ -48,6 +48,7 @@ typedef struct liststr
 int num;
 char *str;
 struct liststr *next;
+char param;
 } list_t;
 
 /**
@@ -193,7 +194,7 @@ void set_info_data(info_t *, char **);
 void free_info_data(info_t *, int);
 
 /* daxx_environ.c */
-char *get_environment(info_t *, const char *);
+char **get_environment(info_t *info);
 int shell_env(info_t *);
 int shell_setenv(info_t *);
 int shell_unsetenv(info_t *);
@@ -222,7 +223,8 @@ void free_list_data(list_t **);
 size_t list_length(const list_t *);
 char **list_to_string_array(list_t *);
 size_t print_list_content(const list_t *);
-list_t *node_starting_with(list_t *, char *, char);
+/*list_t *node_starting_with(list_t *, char *, char);*/
+/*&list_t *node_starting_with(list_t *head, char *prefix, char match);*/
 ssize_t get_node_position(list_t *, list_t *);
 
 /* daxx_vars.c */

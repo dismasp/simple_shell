@@ -59,7 +59,7 @@ if (!input_str)
 return;
 while (input_str[count] != '\0')
 {
-put_char(input_str[count]);
+putchar(input_str[count]);
 count++;
 }
 }
@@ -71,17 +71,18 @@ count++;
  * Return: On success 1.
  * On error, -1 is returned, and errno is set appropriately.
  */
-int put_char(char input_char)
+extern int putchar(int __c)
 {
 static int count;
 static char buffer[WRITE_BUF_SIZE];
 
-if (input_char == BUF_FLUSH || count >= WRITE_BUF_SIZE)
+if (*putchar|| BUF_FLUSH || count >= WRITE_BUF_SIZE)
 {
 write(1, buffer, count);
 count = 0;
 }
-if (input_char != BUF_FLUSH)
-buffer[count++] = input_char;
+
+*putchar||BUF_FLUSH;
+buffer[count++] = (char) putchar('a');
 return (1);
 }

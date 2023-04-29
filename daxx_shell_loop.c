@@ -15,24 +15,24 @@ int builtin_result = 0;
 while (read_bytes != -1 && builtin_result != -2)
 {
 reset_info(inf);
-if (is_interactive(inf))
-_puts("$ ");
-_eputchar(BUF_FLUSH);
+if (shell_interactive(inf))
+puts("$ ");
+putchar(BUF_FLUSH);
 read_bytes = get_user_input(inf);
 if (read_bytes != -1)
 {
 update_info(inf, arguments);
 builtin_result = search_builtin(inf);
 if (builtin_result == -1)
-locate_command(inf);
+execute_command(inf);
 }
-else if (is_interactive(inf))
-_putchar('\n');
+else if ( shell_interactive(inf))
+putchar('\n');
 release_info(inf, 0);
 }
-save_history(inf);
+shell_history(inf);
 release_info(inf, 1);
-if (!is_interactive(inf) && inf->status)
+if (!shell_interactive(inf) && inf->status)
 exit(inf->status);
 if (builtin_result == -2)
 {
@@ -57,28 +57,28 @@ int search_builtin(info_t *inf)
 int i, builtin_status = -1;
 builtin_table builtin_tbl[] = {
 {
-	"exit", _custom_exit},
+"exit", _custom_exit},
 {
-	"env", _custom_env},
+"env", _custom_env},
 {
-	"help", _custom_help},
+"help", _custom_help},
 {
-	"history", _custom_history},
+"history", _custom_history},
 {
-	"setenv", _custom_setenv},
+"setenv", _custom_setenv},
 {
-	"unsetenv", _custom_unsetenv},
+"unsetenv", _custom_unsetenv},
 {
-	"cd", _custom_cd},
+"cd", _custom_cd},
 {
-	"alias", _custom_alias},
+"alias", _custom_alias},
 {
-	NULL, NULL
+NULL, NULL
 }
 };
 
 for (i = 0; builtin_tbl[i].type; i++)
-if (_strcmp(inf->argv[0], builtin_tbl[i].type) == 0)
+if (strcmp(inf->argv[0], builtin_tbl[i].type) == 0)
 {
 inf->line_count++;
 builtin_status = builtin_tbl[i].func(inf);
@@ -110,7 +110,7 @@ counter++;
 if (!counter)
 return;
 
-path = locate_in_path(inf, _getenv(inf, "PATH="), inf->argv[0]);
+path = locate_path(inf, getenv(inf, "PATH="), inf->argv[0]);
 if (path)
 {
 inf->path = path;
@@ -118,7 +118,7 @@ execute_command(inf);
 }
 else
 {
-if ((is_interactive(inf) || _getenv(inf, "PATH=")
+if ((is_interactive(inf) || getenv(inf, "PATH=")
 || inf->argv[0][0] == '/') && is_valid_command(inf, inf->argv[0]))
 execute_command(inf);
 else if (*(inf->arg) != '\n')
